@@ -27,9 +27,9 @@ compute_anomaly_score <- function(obj, x, window_size = 1L, ...) {
 #'
 #' @export
 compute_anomaly_score.sGMRFmix <- function(obj, x, window_size = 1L, ...) {
-  if (!is.data.frame(x)) {
-    x <- as.data.frame(x)
-  }
+  x <- subset(x, select = obj$colnames)
+  x <- scale(x, center = obj$scaled_center, scale = obj$scaled_scale)
+  x <- data.frame(x)
 
   m <- obj$m
   A <- obj$A

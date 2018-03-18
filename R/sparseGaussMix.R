@@ -1,10 +1,11 @@
 #' @importFrom glasso glasso
 #' @importFrom mvtnorm dmvnorm
-#' @importFrom stats cov
+#' @importFrom stats cov kmeans
 #' @importFrom utils txtProgressBar setTxtProgressBar
-sparseGaussMix <- function(x, K, rho, m0 = rep(0, M), lambda0 = 1,
-                           max_iter = 500, tol = 1e-1, verbose = TRUE) {
-  if (verbose) progress_bar <- txtProgressBar(0, max_iter, style=3)
+sparseGaussMix <- function(x, K, rho, kmeans = FALSE, m0 = rep(0, M),
+                           lambda0 = 1, max_iter = 500L, tol = 1e-1,
+                           verbose = TRUE) {
+  if (verbose) progress_bar <- txtProgressBar(0L, max_iter, style = 3L)
   N <- nrow(x)
   M <- ncol(x)
 
@@ -15,7 +16,12 @@ sparseGaussMix <- function(x, K, rho, m0 = rep(0, M), lambda0 = 1,
   # of {mk, Lambda_k} can be naturally done by disjointly partitioning the data
   # along the time axis as D = D1 \cup ... \cup DK and apply e.g. the graphical
   # lasso algorithm [13] on each (Sec. 5)
-  split_block <- rep(1:K, each = ceiling(N / K))[1:N]
+  if (kmeans) {
+    km <- kmeans(x, centers = K)
+    split_block <- km$cluster
+  } else {
+    split_block <- rep(1:K, each = ceiling(N / K))[1:N]
+  }
   splitted_data <- split(x, split_block)
 
   m <- lapply(splitted_data, colMeans)
@@ -88,7 +94,8 @@ sparseGaussMix <- function(x, K, rho, m0 = rep(0, M), lambda0 = 1,
     loglik <- compute_loglik(r, m, invLambda, Lambda, pi)
 
     loglik_gap <- abs(loglik - last_loglik)
-    if (loglik_gap < tol) break
+    if (is.finite(loglik) && loglik_gap < tol) break
+
 
     n_iter <- n_iter + 1
     if(n_iter > max_iter) {
@@ -125,6 +132,7 @@ generate_compute_loglik <- function(x, N, K, rho, m0, lambda0) {
       dmvnorm(x, mean = m[[k]], sigma = invLambda[[k]], log = TRUE)
     }), col.names = 1:K)
     loglik4 <- sum(mapply(function(row, col) loglik_df[row, col], 1:N, inds))
+
     loglik1 + loglik2 + loglik3 + loglik4
   }
 }

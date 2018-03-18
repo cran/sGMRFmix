@@ -4,14 +4,21 @@
 \alias{plot_multivariate_data}
 \title{Plot multivariate data}
 \usage{
-plot_multivariate_data(df, label = NULL, point_size = 1L)
+plot_multivariate_data(df, label = NULL, order_by = index(df),
+  guide_title = NULL, fix_scale = FALSE, point_size = 1L)
 }
 \arguments{
 \item{df}{data.frame of multivariate data}
 
 \item{label}{data.frame of label for each variables. Or vector of label for each observation.}
 
-\item{point_size}{an integer point size}
+\item{order_by}{vector. An x-axis of plots.}
+
+\item{guide_title}{character.}
+
+\item{fix_scale}{logical.}
+
+\item{point_size}{integer. Point size.}
 }
 \value{
 ggplot2 object
