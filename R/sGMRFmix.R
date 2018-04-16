@@ -59,13 +59,9 @@ sGMRFmix <- function(x, K, rho, kmeans = FALSE, m0 = rep(0, M), lambda0 = 1,
   fit <- GMRFmix(x, pi = pi, m = m, A = A, alpha = alpha,
                  max_iter = max_iter, tol = tol, verbose = verbose)
   theta <- fit$theta
-  H <- fit$H
   if (verbose) message("\n################## Finished #############################")
-  mode <- apply(H, 1, function(row) {
-    t <- table(row)
-    as.integer(names(t)[which.max(t)])
-  })
-  result <- list(x = x, pi = pi, m = m, A = A, theta = theta, H = H, mode = mode,
+  mode <- compute_mode(x, m, A)
+  result <- list(x = x, pi = pi, m = m, A = A, theta = theta, mode = mode,
                  Kest = length(pi), K = K, rho = rho, m0 = m0, lambda0 = lambda0,
                  pi_threshold = pi_threshold, colnames = colnames,
                  scaled_center = scaled_center, scaled_scale = scaled_scale)
@@ -75,4 +71,14 @@ sGMRFmix <- function(x, K, rho, kmeans = FALSE, m0 = rep(0, M), lambda0 = 1,
   result$call <- cl
 
   result
+}
+
+#' @importFrom mvtnorm dmvnorm
+compute_mode <- function(x, m, A) {
+  K <- length(m)
+  mat <- do.call(cbind, lapply(1:K, function(k) {
+    sigma <- to_symmetric(solve(A[[k]]))
+    dmvnorm(x, mean = m[[k]], sigma = sigma, log = TRUE)
+  }))
+  unname(apply(mat, 1, which.max))
 }

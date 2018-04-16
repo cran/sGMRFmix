@@ -2,7 +2,7 @@ Package: sGMRFmix
 Type: Package
 Title: Sparse Gaussian Markov Random Field Mixtures for Anomaly
         Detection
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: person("Koji", "Makiyama", email = "hoxo.smile@gmail.com", role = c("cre", "aut"))
 Description: An implementation of sparse Gaussian Markov random field mixtures 
   presented by Ide et al. (2016) <doi:10.1109/ICDM.2016.0119>.
@@ -17,8 +17,8 @@ Imports: ggplot2, glasso, mvtnorm, stats, tidyr, utils, zoo
 Suggests: dplyr, ModelMetrics, testthat, covr, knitr, rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2018-03-18 15:36:02 UTC; kmakiyam
+Packaged: 2018-04-16 09:00:00 UTC; kmakiyam
 Author: Koji Makiyama [cre, aut]
 Maintainer: Koji Makiyama <hoxo.smile@gmail.com>
 Repository: CRAN
-Date/Publication: 2018-03-18 16:06:43 UTC
+Date/Publication: 2018-04-16 09:27:39 UTC

@@ -96,7 +96,6 @@ sparseGaussMix <- function(x, K, rho, kmeans = FALSE, m0 = rep(0, M),
     loglik_gap <- abs(loglik - last_loglik)
     if (is.finite(loglik) && loglik_gap < tol) break
 
-
     n_iter <- n_iter + 1
     if(n_iter > max_iter) {
       message <- sprintf("did not converge after %d iteration: gap: %f",

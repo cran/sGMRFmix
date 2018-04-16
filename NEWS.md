@@ -1,3 +1,9 @@
+# sGMRFmix 0.3.0
+
+## Improvements
+
+- Improve mode estimation
+
 # sGMRFmix 0.2.0
 
 ## New features

@@ -22,9 +22,9 @@ test_data <- generate_test_data()
 plot_multivariate_data(test_data)
 
 ## ------------------------------------------------------------------------
-fit <- sGMRFmix(train_data, K = 7, rho = 1.3, verbose = FALSE)
+fit <- sGMRFmix(train_data, K = 7, rho = 0.8, verbose = FALSE)
 anomaly_score <- compute_anomaly_score(fit, test_data)
-plot_multivariate_data(anomaly_score) + ylim(0, 30)
+plot_multivariate_data(anomaly_score, fix_scale = TRUE) + ylim(NA, 50)
 
 ## ------------------------------------------------------------------------
 set.seed(314)
@@ -76,7 +76,7 @@ df %>% group_by(rho) %>% summarise(mean_auc = mean(auc)) %>%
   mutate(max = ifelse(max(mean_auc) == mean_auc, "***", "."))
 
 ## ------------------------------------------------------------------------
-optimal_rho <- 1.29
+optimal_rho <- 0.774
 fit <- sGMRFmix(train_data, K = 7, rho = optimal_rho, verbose = FALSE)
 
 threshold_candidates <- 10^seq(-1, 1, length.out = 100)
@@ -103,7 +103,7 @@ df %>% group_by(cutoff) %>%
 
 ## ------------------------------------------------------------------------
 anomaly_scores <- compute_anomaly_score(fit, test_data)
-is_anomaly <- anomaly_scores > 0.811
+is_anomaly <- anomaly_scores > 1.71
 plot_multivariate_data(test_data, label = is_anomaly)
 
 ## ------------------------------------------------------------------------
@@ -132,7 +132,7 @@ df %>% group_by(cutoff) %>%
 
 ## ------------------------------------------------------------------------
 anomaly_scores <- compute_anomaly_score(fit, test_data, window_size)
-is_anomaly <- anomaly_scores > 1.96
+is_anomaly <- anomaly_scores > 2.60
 plot_multivariate_data(test_data, label = is_anomaly)
 
 ## ------------------------------------------------------------------------
@@ -143,7 +143,7 @@ fit$pi
 
 ## ------------------------------------------------------------------------
 head(fit$mode, 10)
-plot_multivariate_data(train_data, label = fit$mode)
+plot_multivariate_data(train_data, label = fit$mode, guide_title = "Mode")
 
 ## ----out.width="45%", fig.show="hold"------------------------------------
 inds_mode1 <- c(1:250, 501:750)
